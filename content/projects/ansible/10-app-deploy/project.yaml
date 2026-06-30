@@ -1,0 +1,8 @@
+id: proj-ans-deploy
+title: "Project: Full App Deployment"
+track: ansible
+level: intermediate
+estimated_minutes: 55
+image: lab-ansible:latest
+prerequisites: [proj-ans-harden]
+points: 400

@@ -1,0 +1,8 @@
+id: proj-ans-role
+title: "Project: Role-based Web Tier"
+track: ansible
+level: intermediate
+estimated_minutes: 45
+image: lab-ansible:latest
+prerequisites: [proj-ans-users]
+points: 300
