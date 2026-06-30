@@ -1,0 +1,8 @@
+id: proj-cap-chaos
+title: "Capstone: Pod-kill Chaos Experiment"
+track: chaos-engineering
+level: expert
+estimated_minutes: 70
+image: lab-k8s:latest
+prerequisites: [proj-k8s-deploy]
+points: 500

@@ -1,0 +1,8 @@
+id: proj-cap-finops
+title: "Capstone: FinOps Cost Report"
+track: finops
+level: expert
+estimated_minutes: 70
+image: lab-linux:latest
+prerequisites: []
+points: 500

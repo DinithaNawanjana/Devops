@@ -1,0 +1,8 @@
+id: proj-cap-gitops
+title: "Capstone: GitOps Platform (ArgoCD + Helm + multi-env)"
+track: gitops
+level: expert
+estimated_minutes: 90
+image: lab-k8s:latest
+prerequisites: [proj-k8s-argocd]
+points: 600

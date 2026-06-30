@@ -119,27 +119,48 @@ Adding content needs **no database changes** — drop a folder and call
 
 ## Curriculum
 
-26 tracks across four levels are pre-registered (`content/tracks/`). The
-**entire Beginner level is authored and playable**, plus a Docker slice — every
-item ships a tested `validate.sh` (~30 items total).
+26 tracks across four levels are pre-registered (`content/tracks/`).
+**108 content items** are authored — **8 labs + 100 projects** — and **every
+single one ships a tested `validate.sh`**.
 
 **Labs** (`content/labs/`) — one per beginner track + Docker
 - `linux`, `bash`, `shell-scripting`, `networking`, `git`, `python-devops`,
   `cloud-concepts`, `docker`
 
-**Projects** (`content/projects/`) — bigger, graded, portfolio-worthy
-- **Linux & Bash — 10/10** (sysinfo, backup, log-analyzer, user-manager,
-  disk-alert, service-watcher, file-organizer, cron-report, admin-menu,
-  bootstrapper)
-- **Git — 10/10** (repo-setup, merge-conflict, pre-commit-hook, git-flow,
-  squash-history, remote-push, semver-tags, reflog-recovery, submodules,
-  changelog)
-- **Docker — 1** (compose-stack)
+**Projects** (`content/projects/`) — all 10 spec §5 sets, 10 each:
 
-Projects use the **same folder format** as labs (with `project.yaml` instead of
-`lab.yaml`). Every validator is checked against a reference solution by
-`scripts/_test_linux_projects.sh` and `scripts/_test_git_projects.sh`. Author
-the rest by dropping folders under `content/labs/` or `content/projects/`.
+| Set | Track(s) | Highlights |
+|-----|----------|-----------|
+| Linux & Bash | `linux` | sysinfo, backup+rotation, log-analyzer, user-mgr, watcher… |
+| Git | `git` | branch/merge, hooks, rebase/squash, reflog recovery, submodules |
+| Docker | `docker` | static site, multi-stage, registry, volumes, networks, compose |
+| CI/CD | `cicd` | Actions, Jenkins, GitLab CI, matrix, secrets, blue-green |
+| Ansible | `ansible` | playbooks, roles, Jinja2, Vault, handlers, hardening |
+| Terraform | `terraform` | providers, modules, backends, workspaces, count/for_each |
+| Kubernetes | `kubernetes` | Pods→Ingress→HPA, Helm, RBAC, ArgoCD GitOps |
+| Monitoring | `monitoring` | Prometheus, Grafana, Loki, ELK, SLO burn-rate, tracing |
+| DevSecOps | `devsecops` | Trivy, Semgrep, gitleaks, Vault, cosign, OPA, NetworkPolicy |
+| Capstones | `gitops`/`sre`/`finops`/… | mesh, chaos, IDP, multi-cluster, mega-platform |
+
+The capstones are spread across the **expert tracks** (gitops, service-mesh,
+chaos-engineering, sre, platform-engineering, kubernetes-advanced,
+advanced-cicd, finops) so those light up too.
+
+**Every validator is automatically tested against a reference solution.** Run:
+
+```bash
+scripts/_test_linux_projects.sh      # runnable bash projects
+scripts/_test_git_projects.sh        # git end-state checks
+scripts/_test_docker_projects.sh     # structural (runtime steps run in dind)
+scripts/_test_cicd_projects.sh
+scripts/_test_track_projects.sh <track>   # ansible|terraform|kubernetes|…
+```
+
+Validators come in two flavours: **runnable** (the validator executes the
+learner's scripts — Linux, Git, FinOps, DR, blue-green, …) and **structural +
+runtime-guarded** (config/manifest correctness always graded; build/run steps
+run in the dind/cluster sandbox). Author more by dropping folders under
+`content/labs/` or `content/projects/` — no DB changes needed.
 
 ---
 

@@ -1,0 +1,8 @@
+id: proj-cap-multicluster
+title: "Capstone: Multi-cluster Failover"
+track: kubernetes-advanced
+level: expert
+estimated_minutes: 85
+image: lab-k8s:latest
+prerequisites: [proj-k8s-argocd]
+points: 600

@@ -1,0 +1,8 @@
+id: proj-cap-mega
+title: "Capstone: Full Microservices Platform"
+track: kubernetes-advanced
+level: expert
+estimated_minutes: 180
+image: lab-k8s:latest
+prerequisites: [proj-cap-multicluster]
+points: 1000

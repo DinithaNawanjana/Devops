@@ -1,0 +1,8 @@
+id: proj-cap-sre
+title: "Capstone: SLOs, Alerting & Runbook"
+track: sre
+level: expert
+estimated_minutes: 80
+image: lab-linux:latest
+prerequisites: [proj-mon-slo]
+points: 550

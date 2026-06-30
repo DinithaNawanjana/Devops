@@ -1,0 +1,8 @@
+id: proj-cap-mesh
+title: "Capstone: Istio Traffic Split + mTLS"
+track: service-mesh
+level: expert
+estimated_minutes: 80
+image: lab-k8s:latest
+prerequisites: [proj-k8s-multitier]
+points: 550

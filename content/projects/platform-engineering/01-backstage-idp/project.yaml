@@ -1,0 +1,8 @@
+id: proj-cap-idp
+title: "Capstone: Backstage IDP Slice"
+track: platform-engineering
+level: expert
+estimated_minutes: 75
+image: lab-linux:latest
+prerequisites: [proj-k8s-helm]
+points: 500

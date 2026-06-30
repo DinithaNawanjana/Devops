@@ -1,0 +1,8 @@
+id: proj-cap-dr
+title: "Capstone: Backup & Restore (DR)"
+track: sre
+level: expert
+estimated_minutes: 70
+image: lab-linux:latest
+prerequisites: [proj-cap-sre]
+points: 500

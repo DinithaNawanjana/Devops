@@ -1,0 +1,8 @@
+id: proj-cap-e2e
+title: "Capstone: End-to-end Pipeline"
+track: advanced-cicd
+level: expert
+estimated_minutes: 90
+image: lab-linux:latest
+prerequisites: [proj-cicd-secrets]
+points: 600
