@@ -1,0 +1,8 @@
+id: proj-linux-sysinfo
+title: "Project: System Info Dashboard"
+track: linux
+level: beginner
+estimated_minutes: 40
+image: lab-linux:latest
+prerequisites: [linux-01, bash-01]
+points: 250

@@ -31,9 +31,12 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255))
     xp: Mapped[int] = mapped_column(Integer, default=0)
     level: Mapped[int] = mapped_column(Integer, default=1)
+    streak_days: Mapped[int] = mapped_column(Integer, default=0)
+    last_active_date: Mapped[str | None] = mapped_column(String(10), nullable=True)  # YYYY-MM-DD
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
     progress: Mapped[list["Progress"]] = relationship(back_populates="user")
+    badges: Mapped[list["UserBadge"]] = relationship(back_populates="user")
 
 
 class Progress(Base):
@@ -56,6 +59,22 @@ class Progress(Base):
     )
 
     user: Mapped["User"] = relationship(back_populates="progress")
+
+
+class UserBadge(Base):
+    """A badge earned by a user. Badge definitions live in code (badges.py)."""
+
+    __tablename__ = "user_badges"
+    __table_args__ = (
+        UniqueConstraint("user_id", "badge_slug", name="uq_user_badge"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    badge_slug: Mapped[str] = mapped_column(String(64))
+    awarded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+    user: Mapped["User"] = relationship(back_populates="badges")
 
 
 class LabSession(Base):

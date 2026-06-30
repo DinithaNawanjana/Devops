@@ -20,7 +20,13 @@ from ..database import get_db
 from ..lab_engine import session_manager
 from ..lab_engine.validation import parse
 from ..models import LabSession, User
-from ..schemas import CheckResult, SessionOut
+from ..schemas import (
+    CheckResult,
+    FileContent,
+    FileEntry,
+    SessionOut,
+    WriteFileRequest,
+)
 from .progress import record_completion
 
 router = APIRouter(prefix="/labs", tags=["labs"])
@@ -106,8 +112,68 @@ async def check_session(
 
     result = parse(exit_code, output, points)
     if result.passed:
-        await record_completion(db, user, "lab", sess.lab_id, result.score)
+        item_type = lab.type if lab else "lab"
+        await record_completion(db, user, item_type, sess.lab_id, result.score)
     return result
+
+
+# ── Editor file access (Monaco) ─────────────────────────────
+def _owned_session(session_id: str, user: User):
+    sess = session_manager.get(session_id)
+    if not sess:
+        raise HTTPException(status_code=404, detail="Session not found or expired")
+    if sess.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Not your session")
+    return sess
+
+
+@router.get("/sessions/{session_id}/files", response_model=list[FileEntry])
+async def list_files(
+    session_id: str,
+    path: str = "/root",
+    user: User = Depends(get_current_user),
+):
+    _owned_session(session_id, user)
+    try:
+        return await asyncio.to_thread(session_manager.list_files, session_id, path)
+    except PermissionError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@router.get("/sessions/{session_id}/file", response_model=FileContent)
+async def read_file(
+    session_id: str,
+    path: str,
+    user: User = Depends(get_current_user),
+):
+    _owned_session(session_id, user)
+    try:
+        content = await asyncio.to_thread(session_manager.read_file, session_id, path)
+    except PermissionError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileContent(path=path, content=content)
+
+
+@router.put("/sessions/{session_id}/file")
+async def write_file(
+    session_id: str,
+    body: WriteFileRequest,
+    user: User = Depends(get_current_user),
+):
+    _owned_session(session_id, user)
+    if len(body.content) > 1_000_000:
+        raise HTTPException(status_code=413, detail="File too large (max 1MB)")
+    try:
+        await asyncio.to_thread(
+            session_manager.write_file, session_id, body.path, body.content
+        )
+    except PermissionError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except OSError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"status": "saved", "path": body.path}
 
 
 # ── WebSocket terminal bridge (xterm.js ↔ container shell) ──

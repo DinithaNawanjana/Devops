@@ -1,0 +1,8 @@
+id: proj-docker-compose
+title: "Project: Multi-Container App with Compose"
+track: docker
+level: intermediate
+estimated_minutes: 60
+image: lab-docker:latest
+prerequisites: [docker-01]
+points: 300

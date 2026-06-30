@@ -2,19 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getMe, getProgress, clearToken, type User, type Progress } from "@/lib/api";
+import {
+  getMe, getProgress, getStats, getBadges, clearToken,
+  type User, type Progress, type Stats, type Badge,
+} from "@/lib/api";
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [progress, setProgress] = useState<Progress[]>([]);
+  const [badges, setBadges] = useState<Badge[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([getMe(), getProgress()])
-      .then(([u, p]) => {
-        setUser(u);
-        setProgress(p);
-      })
+    Promise.all([getMe(), getStats(), getProgress(), getBadges()])
+      .then(([u, s, p, b]) => { setUser(u); setStats(s); setProgress(p); setBadges(b); })
       .catch((e) => setError(e.message));
   }, []);
 
@@ -26,11 +28,9 @@ export default function Dashboard() {
       </div>
     );
   }
-
-  if (!user) return <p className="text-slate-500">Loading…</p>;
+  if (!user || !stats) return <p className="text-slate-500">Loading…</p>;
 
   const completed = progress.filter((p) => p.status === "completed");
-  const xpInLevel = user.xp % 500;
 
   return (
     <div>
@@ -44,18 +44,41 @@ export default function Dashboard() {
         </button>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4 mb-8">
-        <Stat label="Level" value={user.level} />
-        <Stat label="Total XP" value={user.xp} />
-        <Stat label="Completed" value={completed.length} />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <Stat label="Level" value={stats.level} />
+        <Stat label="Total XP" value={stats.xp} />
+        <Stat label="🔥 Streak" value={`${stats.streak_days}d`} />
+        <Stat label="Badges" value={stats.badges_earned} />
       </div>
 
       <div className="bg-white border rounded-xl p-5 mb-8">
-        <p className="text-sm text-slate-500 mb-1">Progress to level {user.level + 1}</p>
+        <p className="text-sm text-slate-500 mb-1">Progress to level {stats.level + 1}</p>
         <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
-          <div className="h-full bg-brand" style={{ width: `${(xpInLevel / 500) * 100}%` }} />
+          <div
+            className="h-full bg-brand"
+            style={{ width: `${(stats.xp_into_level / stats.xp_per_level) * 100}%` }}
+          />
         </div>
-        <p className="text-xs text-slate-400 mt-1">{xpInLevel} / 500 XP</p>
+        <p className="text-xs text-slate-400 mt-1">
+          {stats.xp_into_level} / {stats.xp_per_level} XP
+        </p>
+      </div>
+
+      <h2 className="text-lg font-semibold mb-3">Badges</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
+        {badges.map((b) => (
+          <div
+            key={b.slug}
+            className={`border rounded-xl p-3 text-center ${
+              b.earned ? "bg-amber-50 border-amber-300" : "bg-slate-50 border-slate-200 opacity-60"
+            }`}
+            title={b.description}
+          >
+            <div className="text-2xl">{b.earned ? "🏅" : "🔒"}</div>
+            <div className="text-sm font-medium">{b.title}</div>
+            <div className="text-xs text-slate-500">{b.description}</div>
+          </div>
+        ))}
       </div>
 
       <h2 className="text-lg font-semibold mb-3">Completed items</h2>
@@ -67,7 +90,7 @@ export default function Dashboard() {
         <ul className="space-y-2">
           {completed.map((p) => (
             <li key={`${p.item_type}-${p.item_id}`} className="bg-white border rounded-lg px-4 py-2 flex justify-between text-sm">
-              <span>{p.item_type}: {p.item_id}</span>
+              <span><span className="text-slate-400">{p.item_type}</span> · {p.item_id}</span>
               <span className="text-green-600">+{p.score} XP</span>
             </li>
           ))}
@@ -77,7 +100,7 @@ export default function Dashboard() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="bg-white border rounded-xl p-5 text-center">
       <div className="text-3xl font-bold text-brand">{value}</div>

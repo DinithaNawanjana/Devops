@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "DevOps Learning Platform",
@@ -16,10 +17,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="font-bold text-lg">
               🚀 DevOps<span className="text-brand">Labs</span>
             </Link>
-            <nav className="flex gap-4 text-sm">
+            <nav className="flex gap-4 text-sm items-center">
               <Link href="/" className="hover:text-brand">Tracks</Link>
+              <Link href="/skilltree" className="hover:text-brand">Skill Tree</Link>
               <Link href="/dashboard" className="hover:text-brand">Dashboard</Link>
               <Link href="/login" className="hover:text-brand">Login</Link>
+              <ThemeToggle />
             </nav>
           </div>
         </header>

@@ -37,10 +37,11 @@ def _read(path: Path) -> str:
 
 
 class Lab:
-    def __init__(self, track: str, slug: str, meta: dict, path: Path):
+    def __init__(self, track: str, slug: str, meta: dict, path: Path, kind: str = "lab"):
         self.path = path
         self.track = track
         self.slug = slug
+        self.type = kind  # "lab" | "project"
         self.id: str = meta.get("id", f"{track}-{slug}")
         self.title: str = meta.get("title", slug)
         self.level: str = meta.get("level", "beginner")
@@ -56,6 +57,7 @@ class Lab:
             "slug": self.slug,
             "title": self.title,
             "level": self.level,
+            "type": self.type,
             "estimated_minutes": self.estimated_minutes,
             "points": self.points,
             "prerequisites": self.prerequisites,
@@ -103,12 +105,17 @@ def _catalog() -> tuple[dict[str, Track], dict[str, Lab]]:
             meta = yaml.safe_load(_read(tdir / "track.yaml")) or {}
             tracks[tdir.name] = Track(tdir.name, meta)
 
-    labs_dir = settings.content_dir / "labs"
-    if labs_dir.exists():
-        for track_dir in sorted(p for p in labs_dir.iterdir() if p.is_dir()):
-            for lab_dir in sorted(p for p in track_dir.iterdir() if p.is_dir()):
-                meta = yaml.safe_load(_read(lab_dir / "lab.yaml")) or {}
-                lab = Lab(track_dir.name, lab_dir.name, meta, lab_dir)
+    # Labs and projects share the same folder format; only the root differs.
+    for kind, root, metafile in (
+        ("lab", settings.content_dir / "labs", "lab.yaml"),
+        ("project", settings.content_dir / "projects", "project.yaml"),
+    ):
+        if not root.exists():
+            continue
+        for track_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+            for item_dir in sorted(p for p in track_dir.iterdir() if p.is_dir()):
+                meta = yaml.safe_load(_read(item_dir / metafile)) or {}
+                lab = Lab(track_dir.name, item_dir.name, meta, item_dir, kind=kind)
                 labs[lab.id] = lab
 
     return tracks, labs
@@ -122,7 +129,7 @@ def list_tracks() -> list[dict]:
     tracks, labs = _catalog()
     out = []
     for t in sorted(tracks.values(), key=lambda x: x.order_index):
-        track_labs = [lb for lb in labs.values() if lb.track == t.slug]
+        track_items = [lb for lb in labs.values() if lb.track == t.slug]
         out.append(
             {
                 "slug": t.slug,
@@ -130,18 +137,28 @@ def list_tracks() -> list[dict]:
                 "level": t.level,
                 "order_index": t.order_index,
                 "description": t.description,
-                "lab_count": len(track_labs),
-                "project_count": 0,
+                "lab_count": sum(1 for lb in track_items if lb.type == "lab"),
+                "project_count": sum(1 for lb in track_items if lb.type == "project"),
             }
         )
     return out
 
 
-def list_labs(track: str | None = None) -> list[dict]:
+def list_labs(track: str | None = None, kind: str = "lab") -> list[dict]:
     _, labs = _catalog()
-    items = [lb for lb in labs.values() if track is None or lb.track == track]
+    items = [
+        lb
+        for lb in labs.values()
+        if (track is None or lb.track == track) and lb.type == kind
+    ]
     items.sort(key=lambda lb: (lb.track, lb.slug))
     return [lb.summary() for lb in items]
+
+
+def list_all() -> list[Lab]:
+    """All labs + projects (for the skill tree)."""
+    _, labs = _catalog()
+    return sorted(labs.values(), key=lambda lb: (lb.track, lb.type, lb.slug))
 
 
 def get_lab(lab_id: str) -> Lab | None:

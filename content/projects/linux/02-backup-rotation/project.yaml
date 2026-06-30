@@ -1,0 +1,8 @@
+id: proj-linux-backup
+title: "Project: Backup Script with Rotation"
+track: linux
+level: intermediate
+estimated_minutes: 50
+image: lab-linux:latest
+prerequisites: [proj-linux-sysinfo]
+points: 300

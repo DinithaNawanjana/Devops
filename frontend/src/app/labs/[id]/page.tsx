@@ -4,21 +4,25 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import {
-  getLab, startLab, stopSession, checkSession,
+  getLab, startLab, stopSession, checkSession, getSolution,
   terminalWsUrl, getToken,
   type LabDetail, type Session, type CheckResult,
 } from "@/lib/api";
 
 const Terminal = dynamic(() => import("@/components/Terminal"), { ssr: false });
+const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 type Tab = "instructions" | "theory";
+type Panel = "terminal" | "editor";
 
 export default function LabPage() {
   const { id } = useParams<{ id: string }>();
   const [lab, setLab] = useState<LabDetail | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [tab, setTab] = useState<Tab>("instructions");
+  const [panel, setPanel] = useState<Panel>("terminal");
   const [result, setResult] = useState<CheckResult | null>(null);
+  const [solution, setSolution] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -59,6 +63,16 @@ export default function LabPage() {
       setError(e.message);
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function handleReveal() {
+    setError("");
+    try {
+      const s = await getSolution(id);
+      setSolution(s.solution_html);
+    } catch (e: any) {
+      setError(e.message);
     }
   }
 
@@ -124,15 +138,34 @@ export default function LabPage() {
           />
         </div>
 
-        {/* Right: terminal + results */}
+        {/* Right: terminal / editor + results */}
         <div className="space-y-4">
-          <div className="bg-slate-900 rounded-xl h-[55vh] p-2 overflow-hidden">
-            {session ? (
-              <Terminal wsUrl={terminalWsUrl(session.id)} />
-            ) : (
-              <div className="h-full flex items-center justify-center text-slate-400 text-sm">
-                Start the lab to open a terminal
+          {session && (
+            <div className="flex gap-1 text-sm">
+              {(["terminal", "editor"] as Panel[]).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPanel(p)}
+                  className={`px-3 py-1 rounded-t-lg capitalize ${
+                    panel === p ? "bg-slate-900 text-white" : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {p === "terminal" ? "🖥 Terminal" : "📝 Editor"}
+                </button>
+              ))}
+            </div>
+          )}
+          <div className="h-[55vh] overflow-hidden rounded-xl">
+            {!session ? (
+              <div className="bg-slate-900 h-full flex items-center justify-center text-slate-400 text-sm rounded-xl">
+                Start the lab to open a terminal & editor
               </div>
+            ) : panel === "terminal" ? (
+              <div className="bg-slate-900 h-full p-2 rounded-xl">
+                <Terminal wsUrl={terminalWsUrl(session.id)} />
+              </div>
+            ) : (
+              <Editor sessionId={session.id} />
             )}
           </div>
 
@@ -158,6 +191,21 @@ export default function LabPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+          )}
+
+          {lab.has_solution && (
+            <div className="text-sm">
+              {!solution ? (
+                <button onClick={handleReveal} className="text-slate-500 hover:text-slate-800 underline">
+                  💡 Reveal solution
+                </button>
+              ) : (
+                <details open className="bg-white border rounded-xl p-4">
+                  <summary className="cursor-pointer font-medium">Solution</summary>
+                  <div className="prose-lesson mt-2" dangerouslySetInnerHTML={{ __html: solution }} />
+                </details>
+              )}
             </div>
           )}
         </div>

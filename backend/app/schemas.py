@@ -47,6 +47,7 @@ class LabSummary(BaseModel):
     slug: str
     title: str
     level: str
+    type: str = "lab"
     estimated_minutes: int
     points: int
     prerequisites: list[str] = []
@@ -91,3 +92,57 @@ class CheckResult(BaseModel):
     score: int
     steps: list[CheckStep]
     raw_output: str = ""
+
+
+# ─── Editor / files ───────────────────────────────────────
+class FileEntry(BaseModel):
+    name: str
+    type: str  # dir | file
+    path: str
+
+
+class FileContent(BaseModel):
+    path: str
+    content: str
+
+
+class WriteFileRequest(BaseModel):
+    path: str
+    content: str
+
+
+# ─── Hints / solution ─────────────────────────────────────
+class SolutionOut(BaseModel):
+    solution_html: str
+
+
+# ─── Skill tree ───────────────────────────────────────────
+class SkillNode(BaseModel):
+    id: str
+    track: str
+    title: str
+    level: str
+    type: str = "lab"  # lab | project
+    points: int
+    prerequisites: list[str] = []
+    status: str  # locked | available | completed
+
+
+# ─── Badges ───────────────────────────────────────────────
+class BadgeOut(BaseModel):
+    slug: str
+    title: str
+    description: str
+    earned: bool
+    awarded_at: datetime | None = None
+
+
+# ─── Gamification summary ─────────────────────────────────
+class StatsOut(BaseModel):
+    xp: int
+    level: int
+    xp_into_level: int
+    xp_per_level: int
+    completed: int
+    streak_days: int
+    badges_earned: int

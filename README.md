@@ -27,9 +27,27 @@ each with an auto-validation checker.
 └── scripts/                # helpers (build images, generate tracks)
 ```
 
-This corresponds to **Phase 1 (skeleton)** + **Phase 2 (the lab engine)** of
-the build roadmap, plus the **content pipeline** and three fully working
-sample labs.
+### Implemented features
+
+**Core engine & MVP**
+- JWT auth (register / login), per-user progress
+- Disk-based catalog: tracks, labs, **projects**
+- Lab engine: Docker session manager (CPU/mem/PID caps, idle reaper, orphan
+  cleanup), xterm.js WebSocket terminal, `validate.sh` runner + Check button
+- **Monaco code editor** with an in-sandbox file browser — edits save straight
+  into the running container so `validate.sh` sees them
+- **Reveal solution** (after attempt)
+
+**Learning layer**
+- **Prerequisite skill tree** — items show `locked / available / completed`
+  per user, unlocking as prerequisites are met
+- **XP, levels, daily streaks**
+- **Badges** (11 definitions, auto-awarded on completion)
+- **Search** across labs & projects, **dark mode**
+
+This covers **Phase 1–2** (skeleton + lab engine) and most of **Phase 3–4**
+(content pipeline, editor, progress/XP/badges/skill tree). See the roadmap at
+the bottom for what remains (mostly authoring the full content library).
 
 ---
 
@@ -101,15 +119,22 @@ Adding content needs **no database changes** — drop a folder and call
 
 ## Curriculum
 
-26 tracks across four levels are pre-registered (`content/tracks/`). Three
-labs are authored end-to-end as working references:
+26 tracks across four levels are pre-registered (`content/tracks/`). Authored
+end-to-end as working references (each with a tested `validate.sh`):
 
+**Labs** (`content/labs/`)
 - `linux/01-filesystem-basics` — files, permissions (`lab-linux`)
 - `bash/01-pipes-and-filters` — pipes, grep/awk/sort (`lab-linux`)
 - `docker/01-first-container` — run Nginx in a container (`lab-docker`/dind)
 
-Author the rest by following the same folder format. See the master spec for
-the full topic + project lists.
+**Projects** (`content/projects/`) — bigger, graded, portfolio-worthy
+- `linux/01-sysinfo-dashboard` — system dashboard script
+- `linux/02-backup-rotation` — timestamped backups with rotation + logging
+- `docker/01-compose-stack` — multi-service stack with Compose
+
+Projects use the **same folder format** as labs (with `project.yaml` instead of
+`lab.yaml`). Author the rest by dropping folders under `content/labs/` or
+`content/projects/`. See the master spec for the full topic + project lists.
 
 ---
 
@@ -151,9 +176,14 @@ npm run dev
 
 ## Roadmap (remaining)
 
-- **Phase 3:** Monaco file persistence into the sandbox; author Linux/Git/
-  Docker tracks fully (theory + 10 projects each).
-- **Phase 4:** Prerequisite skill tree, badges/streaks, project workspace,
-  auto-grading, "Export to GitHub".
-- **Phase 5:** K8s (kind/k3d) labs, monitoring/DevSecOps tracks, certificates,
-  leaderboard, analytics, dark mode.
+Done: the platform/engine and the learning layer (editor, skill tree, XP,
+streaks, badges, search, dark mode). What's left is mostly **content volume**
+and a few advanced features:
+
+- **Content library:** author the remaining labs + 10 projects per track across
+  all 26 topics (the format and tooling are in place — it's authoring work).
+- **Projects extras:** "Export to GitHub" button, project gallery.
+- **Phase 5:** K8s (kind/k3d) labs, monitoring/DevSecOps tracks, certificates
+  (PDF), leaderboard, usage analytics, AI hint assistant.
+- **Hardening:** Alembic migrations, per-image security profiles for dind,
+  rate limiting, tests in CI.

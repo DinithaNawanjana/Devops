@@ -38,6 +38,25 @@ class Session:
         self.last_active = time.time()
 
 
+def _q(s: str) -> str:
+    """Single-quote a string for safe embedding in a /bin/sh command."""
+    return "'" + s.replace("'", "'\\''") + "'"
+
+
+def _sanitize(path: str) -> str:
+    """Confine editor file access to the sandbox home; block traversal."""
+    p = (path or "/root").strip()
+    if not p.startswith("/"):
+        p = f"/root/{p}"
+    # Reject parent traversal outright — labs only ever touch /root, /lab, /tmp.
+    if ".." in p.split("/"):
+        raise PermissionError("path traversal not allowed")
+    allowed = ("/root", "/home", "/tmp", "/lab", "/app", "/srv", "/var/www")
+    if not p.startswith(allowed):
+        raise PermissionError(f"path {p} outside allowed roots")
+    return p
+
+
 def _tar_bytes(files: dict[str, str]) -> bytes:
     """Pack {path: content} into an uncompressed tar for put_archive."""
     buf = io.BytesIO()
@@ -135,6 +154,63 @@ class LabSessionManager:
         res = c.exec_run("sh -lc 'sh /lab/validate.sh'", demux=False)
         output = res.output.decode("utf-8", errors="replace") if res.output else ""
         return res.exit_code, output
+
+    # ── file access (Monaco editor) ─────────────────────────
+    def _container(self, session_id: str):
+        sess = self._sessions.get(session_id)
+        if not sess:
+            raise KeyError(session_id)
+        sess.touch()
+        return self.client.containers.get(sess.container_id)
+
+    def list_files(self, session_id: str, path: str = "/root") -> list[dict]:
+        """List entries in `path`. Returns [{name, type, path}] sorted dirs-first."""
+        c = self._container(session_id)
+        safe = _sanitize(path)
+        # -p appends '/' to directories so we can classify without stat calls.
+        res = c.exec_run(f"sh -lc 'ls -1Ap {_q(safe)} 2>/dev/null'")
+        if res.exit_code != 0:
+            return []
+        entries = []
+        for line in res.output.decode("utf-8", "replace").splitlines():
+            if not line:
+                continue
+            is_dir = line.endswith("/")
+            name = line.rstrip("/")
+            entries.append(
+                {
+                    "name": name,
+                    "type": "dir" if is_dir else "file",
+                    "path": f"{safe.rstrip('/')}/{name}",
+                }
+            )
+        entries.sort(key=lambda e: (e["type"] != "dir", e["name"]))
+        return entries
+
+    def read_file(self, session_id: str, path: str) -> str:
+        """Return the text content of a file inside the sandbox."""
+        c = self._container(session_id)
+        safe = _sanitize(path)
+        res = c.exec_run(f"sh -lc 'base64 {_q(safe)} 2>/dev/null'")
+        if res.exit_code != 0:
+            raise FileNotFoundError(path)
+        import base64
+
+        return base64.b64decode(res.output).decode("utf-8", "replace")
+
+    def write_file(self, session_id: str, path: str, content: str) -> None:
+        """Overwrite a file inside the sandbox with `content`."""
+        import base64
+
+        c = self._container(session_id)
+        safe = _sanitize(path)
+        b64 = base64.b64encode(content.encode("utf-8")).decode("ascii")
+        # Pipe through base64 -d so arbitrary bytes survive the shell.
+        res = c.exec_run(
+            f"sh -lc 'printf %s {_q(b64)} | base64 -d > {_q(safe)}'"
+        )
+        if res.exit_code != 0:
+            raise OSError(res.output.decode("utf-8", "replace"))
 
     # ── reaping idle / expired containers ───────────────────
     def reap(self) -> int:
