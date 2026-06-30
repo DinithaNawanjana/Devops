@@ -1,0 +1,8 @@
+id: proj-sec-cosign
+title: "Project: Sign & Verify Images"
+track: devsecops
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-sec-vault]
+points: 300

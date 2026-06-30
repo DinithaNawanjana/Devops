@@ -1,0 +1,8 @@
+id: proj-sec-sast
+title: "Project: SAST with Semgrep"
+track: devsecops
+level: advanced
+estimated_minutes: 35
+image: lab-docker:latest
+prerequisites: [proj-sec-trivy]
+points: 250

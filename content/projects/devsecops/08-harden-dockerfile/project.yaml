@@ -1,0 +1,8 @@
+id: proj-sec-harden
+title: "Project: Harden a Dockerfile"
+track: devsecops
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-sec-deps]
+points: 300

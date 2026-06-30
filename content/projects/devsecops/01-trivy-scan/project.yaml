@@ -1,0 +1,8 @@
+id: proj-sec-trivy
+title: "Project: Trivy Image Scan in CI"
+track: devsecops
+level: advanced
+estimated_minutes: 35
+image: lab-docker:latest
+prerequisites: [docker-01]
+points: 250

@@ -1,0 +1,8 @@
+id: proj-sec-deps
+title: "Project: Dependency Scanning"
+track: devsecops
+level: advanced
+estimated_minutes: 35
+image: lab-docker:latest
+prerequisites: [proj-sec-opa]
+points: 250

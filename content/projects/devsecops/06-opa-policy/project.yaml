@@ -1,0 +1,8 @@
+id: proj-sec-opa
+title: "Project: Policy as Code (OPA)"
+track: devsecops
+level: advanced
+estimated_minutes: 45
+image: lab-docker:latest
+prerequisites: [proj-sec-cosign]
+points: 350

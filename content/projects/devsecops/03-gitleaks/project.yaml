@@ -1,0 +1,8 @@
+id: proj-sec-gitleaks
+title: "Project: Secrets Scanning"
+track: devsecops
+level: advanced
+estimated_minutes: 30
+image: lab-docker:latest
+prerequisites: [proj-sec-sast]
+points: 250

@@ -1,0 +1,8 @@
+id: proj-sec-netpol
+title: "Project: K8s Network Policy"
+track: devsecops
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-sec-harden]
+points: 300

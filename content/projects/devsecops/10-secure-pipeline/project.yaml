@@ -1,0 +1,8 @@
+id: proj-sec-pipeline
+title: "Project: Secure CI/CD Pipeline"
+track: devsecops
+level: advanced
+estimated_minutes: 60
+image: lab-docker:latest
+prerequisites: [proj-sec-netpol]
+points: 450
