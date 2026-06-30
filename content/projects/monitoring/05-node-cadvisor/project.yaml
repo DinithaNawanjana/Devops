@@ -1,0 +1,8 @@
+id: proj-mon-host
+title: "Project: Host Monitoring"
+track: monitoring
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-mon-instrument]
+points: 300

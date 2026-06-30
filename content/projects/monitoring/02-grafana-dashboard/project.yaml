@@ -1,0 +1,8 @@
+id: proj-mon-grafana
+title: "Project: Grafana + Prometheus"
+track: monitoring
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-mon-prom]
+points: 300

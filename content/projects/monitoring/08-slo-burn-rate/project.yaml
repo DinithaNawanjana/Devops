@@ -1,0 +1,8 @@
+id: proj-mon-slo
+title: "Project: SLO Burn-rate Rules"
+track: monitoring
+level: advanced
+estimated_minutes: 45
+image: lab-docker:latest
+prerequisites: [proj-mon-elk]
+points: 350

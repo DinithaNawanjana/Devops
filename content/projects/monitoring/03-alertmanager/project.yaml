@@ -1,0 +1,8 @@
+id: proj-mon-alerts
+title: "Project: Alert Rules + Alertmanager"
+track: monitoring
+level: advanced
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-mon-grafana]
+points: 300

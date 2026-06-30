@@ -1,0 +1,8 @@
+id: proj-mon-fullstack
+title: "Project: Full Observability Stack"
+track: monitoring
+level: advanced
+estimated_minutes: 60
+image: lab-docker:latest
+prerequisites: [proj-mon-tracing]
+points: 450

@@ -1,0 +1,8 @@
+id: proj-mon-prom
+title: "Project: Prometheus Scrape Config"
+track: monitoring
+level: advanced
+estimated_minutes: 35
+image: lab-docker:latest
+prerequisites: [docker-01]
+points: 250
