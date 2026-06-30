@@ -1,0 +1,8 @@
+id: proj-tf-vars
+title: "Project: Variables, Outputs & tfvars"
+track: terraform
+level: intermediate
+estimated_minutes: 35
+image: lab-terraform:latest
+prerequisites: [proj-tf-docker]
+points: 250

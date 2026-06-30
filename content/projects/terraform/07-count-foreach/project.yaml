@@ -1,0 +1,8 @@
+id: proj-tf-loops
+title: "Project: count & for_each"
+track: terraform
+level: intermediate
+estimated_minutes: 40
+image: lab-terraform:latest
+prerequisites: [proj-tf-vpc]
+points: 300
