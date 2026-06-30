@@ -119,22 +119,27 @@ Adding content needs **no database changes** — drop a folder and call
 
 ## Curriculum
 
-26 tracks across four levels are pre-registered (`content/tracks/`). Authored
-end-to-end as working references (each with a tested `validate.sh`):
+26 tracks across four levels are pre-registered (`content/tracks/`). The
+**entire Beginner level is authored and playable**, plus a Docker slice — every
+item ships a tested `validate.sh` (~30 items total).
 
-**Labs** (`content/labs/`)
-- `linux/01-filesystem-basics` — files, permissions (`lab-linux`)
-- `bash/01-pipes-and-filters` — pipes, grep/awk/sort (`lab-linux`)
-- `docker/01-first-container` — run Nginx in a container (`lab-docker`/dind)
+**Labs** (`content/labs/`) — one per beginner track + Docker
+- `linux`, `bash`, `shell-scripting`, `networking`, `git`, `python-devops`,
+  `cloud-concepts`, `docker`
 
 **Projects** (`content/projects/`) — bigger, graded, portfolio-worthy
-- `linux/01-sysinfo-dashboard` — system dashboard script
-- `linux/02-backup-rotation` — timestamped backups with rotation + logging
-- `docker/01-compose-stack` — multi-service stack with Compose
+- **Linux & Bash — 10/10** (sysinfo, backup, log-analyzer, user-manager,
+  disk-alert, service-watcher, file-organizer, cron-report, admin-menu,
+  bootstrapper)
+- **Git — 10/10** (repo-setup, merge-conflict, pre-commit-hook, git-flow,
+  squash-history, remote-push, semver-tags, reflog-recovery, submodules,
+  changelog)
+- **Docker — 1** (compose-stack)
 
 Projects use the **same folder format** as labs (with `project.yaml` instead of
-`lab.yaml`). Author the rest by dropping folders under `content/labs/` or
-`content/projects/`. See the master spec for the full topic + project lists.
+`lab.yaml`). Every validator is checked against a reference solution by
+`scripts/_test_linux_projects.sh` and `scripts/_test_git_projects.sh`. Author
+the rest by dropping folders under `content/labs/` or `content/projects/`.
 
 ---
 
