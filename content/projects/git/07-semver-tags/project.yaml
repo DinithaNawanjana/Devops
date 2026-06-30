@@ -1,0 +1,8 @@
+id: proj-git-tags
+title: "Project: Tag a Release"
+track: git
+level: beginner
+estimated_minutes: 30
+image: lab-linux:latest
+prerequisites: [proj-git-remote]
+points: 200

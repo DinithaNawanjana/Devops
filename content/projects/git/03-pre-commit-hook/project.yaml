@@ -1,0 +1,8 @@
+id: proj-git-hook
+title: "Project: Pre-commit Lint Hook"
+track: git
+level: beginner
+estimated_minutes: 40
+image: lab-linux:latest
+prerequisites: [proj-git-conflict]
+points: 250

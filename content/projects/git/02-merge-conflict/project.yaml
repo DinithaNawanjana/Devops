@@ -1,0 +1,8 @@
+id: proj-git-conflict
+title: "Project: Resolve a Merge Conflict"
+track: git
+level: beginner
+estimated_minutes: 35
+image: lab-linux:latest
+prerequisites: [proj-git-repo]
+points: 250

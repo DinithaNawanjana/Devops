@@ -1,0 +1,8 @@
+id: proj-git-repo
+title: "Project: Bootstrap a Repo"
+track: git
+level: beginner
+estimated_minutes: 30
+image: lab-linux:latest
+prerequisites: [git-01]
+points: 200
