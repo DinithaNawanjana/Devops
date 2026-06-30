@@ -1,0 +1,8 @@
+id: shell-01
+title: "Loops, Conditionals & Functions"
+track: shell-scripting
+level: beginner
+estimated_minutes: 30
+image: lab-linux:latest
+prerequisites: [bash-01]
+points: 120
