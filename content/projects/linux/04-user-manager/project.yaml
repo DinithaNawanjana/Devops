@@ -1,0 +1,8 @@
+id: proj-linux-usermgr
+title: "Project: User Account Manager"
+track: linux
+level: beginner
+estimated_minutes: 50
+image: lab-linux:latest
+prerequisites: [proj-linux-loganalyzer]
+points: 300

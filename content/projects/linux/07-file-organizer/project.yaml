@@ -1,0 +1,8 @@
+id: proj-linux-organizer
+title: "Project: File Organizer by Extension"
+track: linux
+level: beginner
+estimated_minutes: 40
+image: lab-linux:latest
+prerequisites: [proj-linux-watcher]
+points: 250
