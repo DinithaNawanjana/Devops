@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@xterm/xterm/css/xterm.css";
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* Rendered lesson markdown */
+.prose-lesson h1 { @apply text-2xl font-bold mt-6 mb-3; }
+.prose-lesson h2 { @apply text-xl font-semibold mt-5 mb-2; }
+.prose-lesson h3 { @apply text-lg font-semibold mt-4 mb-2; }
+.prose-lesson p { @apply my-3 leading-relaxed; }
+.prose-lesson ul { @apply list-disc pl-6 my-3 space-y-1; }
+.prose-lesson ol { @apply list-decimal pl-6 my-3 space-y-1; }
+.prose-lesson code { @apply bg-slate-200 px-1.5 py-0.5 rounded text-sm font-mono; }
+.prose-lesson pre { @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto my-4; }
+.prose-lesson pre code { @apply bg-transparent p-0 text-slate-100; }
+.prose-lesson table { @apply w-full my-4 border-collapse; }
+.prose-lesson th, .prose-lesson td { @apply border border-slate-300 px-3 py-1.5 text-left; }
+.prose-lesson a { @apply text-brand underline; }

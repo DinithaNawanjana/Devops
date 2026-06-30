@@ -1,0 +1,5 @@
+slug: git
+title: "Git & Version Control"
+level: beginner
+order_index: 5
+description: "Branching, merging, rebasing, GitHub/GitLab."

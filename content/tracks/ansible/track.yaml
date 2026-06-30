@@ -1,0 +1,5 @@
+slug: ansible
+title: "Ansible"
+level: intermediate
+order_index: 10
+description: "Inventory, playbooks, roles, templating, vault."

@@ -1,0 +1,5 @@
+slug: devsecops
+title: "DevSecOps"
+level: advanced
+order_index: 19
+description: "SAST/DAST, image scanning, secrets mgmt, policy-as-code."

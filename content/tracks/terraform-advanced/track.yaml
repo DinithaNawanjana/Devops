@@ -1,0 +1,5 @@
+slug: terraform-advanced
+title: "Terraform Advanced"
+level: advanced
+order_index: 16
+description: "Modules, remote state, workspaces, provisioners."

@@ -1,0 +1,5 @@
+slug: bash
+title: "Command Line & Bash"
+level: beginner
+order_index: 2
+description: "Navigation, pipes, redirection, globbing."

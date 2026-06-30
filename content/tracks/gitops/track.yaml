@@ -1,0 +1,5 @@
+slug: gitops
+title: "GitOps"
+level: expert
+order_index: 21
+description: "ArgoCD, FluxCD, declarative delivery."

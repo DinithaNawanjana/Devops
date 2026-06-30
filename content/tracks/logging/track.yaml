@@ -1,0 +1,5 @@
+slug: logging
+title: "Logging Stack"
+level: advanced
+order_index: 18
+description: "ELK / EFK, log aggregation, parsing."

@@ -1,0 +1,5 @@
+slug: advanced-cicd
+title: "Advanced CI/CD"
+level: advanced
+order_index: 15
+description: "Multi-stage pipelines, testing, artifacts, blue-green/canary."

@@ -1,0 +1,5 @@
+slug: cicd
+title: "CI/CD Fundamentals"
+level: intermediate
+order_index: 9
+description: "Jenkins, GitHub Actions, GitLab CI pipelines."

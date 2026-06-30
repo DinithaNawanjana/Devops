@@ -1,0 +1,5 @@
+slug: shell-scripting
+title: "Shell Scripting"
+level: beginner
+order_index: 3
+description: "Variables, loops, conditionals, functions, cron."

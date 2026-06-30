@@ -1,0 +1,8 @@
+id: bash-01
+title: "Pipes, Filters & Redirection"
+track: bash
+level: beginner
+estimated_minutes: 25
+image: lab-linux:latest
+prerequisites: [linux-01]
+points: 100

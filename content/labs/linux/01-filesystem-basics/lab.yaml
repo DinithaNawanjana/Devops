@@ -1,0 +1,8 @@
+id: linux-01
+title: "Filesystem, Files & Permissions"
+track: linux
+level: beginner
+estimated_minutes: 20
+image: lab-linux:latest
+prerequisites: []
+points: 100

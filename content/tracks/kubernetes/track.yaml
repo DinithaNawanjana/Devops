@@ -1,0 +1,5 @@
+slug: kubernetes
+title: "Kubernetes Core"
+level: advanced
+order_index: 14
+description: "Pods, deployments, services, ingress, configmaps, secrets."

@@ -1,0 +1,78 @@
+# DevOps Learning Platform — full local stack.
+#
+#   docker compose up --build
+#
+# Services:
+#   db       PostgreSQL (users, progress, lab metadata)
+#   redis    sessions / cache / rate limits
+#   api      FastAPI backend + lab engine (spawns sandbox containers)
+#   web      Next.js frontend
+#
+# The api service mounts the host Docker socket so it can spawn per-session
+# lab sandboxes. This is privileged — for hardened setups use Sysbox or
+# rootless Docker (see README §Security).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-devops}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devops}
+      POSTGRES_DB: ${POSTGRES_DB:-devops_platform}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devops}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save "" --appendonly no
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://devops:devops@db:5432/devops_platform}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+    volumes:
+      # spawn sandbox containers on the host engine
+      - /var/run/docker.sock:/var/run/docker.sock
+      # content is read live so authors can edit without rebuilding
+      - ./content:/app/content:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build: ./frontend
+    env_file: .env
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+
+networks:
+  default:
+    name: devops_labnet

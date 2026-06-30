@@ -1,0 +1,5 @@
+slug: python-devops
+title: "Python for DevOps"
+level: beginner
+order_index: 6
+description: "Scripting, requests, file/OS handling, virtualenv."

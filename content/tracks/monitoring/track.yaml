@@ -1,0 +1,5 @@
+slug: monitoring
+title: "Monitoring & Observability"
+level: advanced
+order_index: 17
+description: "Prometheus, Grafana, Loki, alerting."

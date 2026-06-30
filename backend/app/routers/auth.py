@@ -1,0 +1,55 @@
+"""Register / login / current user."""
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..auth import (
+    create_access_token,
+    get_current_user,
+    get_user_by_username,
+    hash_password,
+    verify_password,
+)
+from ..database import get_db
+from ..models import User
+from ..schemas import RegisterRequest, TokenResponse, UserOut
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/register", response_model=TokenResponse)
+async def register(body: RegisterRequest, db: AsyncSession = Depends(get_db)):
+    existing = await db.execute(
+        select(User).where(
+            (User.username == body.username) | (User.email == body.email)
+        )
+    )
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=409, detail="Username or email already taken")
+
+    user = User(
+        email=body.email,
+        username=body.username,
+        password_hash=hash_password(body.password),
+    )
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+    return TokenResponse(access_token=create_access_token(user.id))
+
+
+@router.post("/login", response_model=TokenResponse)
+async def login(
+    form: OAuth2PasswordRequestForm = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
+    user = await get_user_by_username(db, form.username)
+    if not user or not verify_password(form.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return TokenResponse(access_token=create_access_token(user.id))
+
+
+@router.get("/me", response_model=UserOut)
+async def me(user: User = Depends(get_current_user)):
+    return user

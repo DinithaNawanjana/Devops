@@ -1,0 +1,5 @@
+slug: linux
+title: "Linux Fundamentals"
+level: beginner
+order_index: 1
+description: "Filesystem, permissions, processes, package management."

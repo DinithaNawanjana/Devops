@@ -1,0 +1,5 @@
+slug: chaos-engineering
+title: "Chaos Engineering"
+level: expert
+order_index: 25
+description: "Fault injection, resilience testing (Litmus, Chaos Mesh)."

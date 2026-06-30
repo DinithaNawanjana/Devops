@@ -1,0 +1,5 @@
+slug: kubernetes-advanced
+title: "Kubernetes Advanced"
+level: expert
+order_index: 20
+description: "Helm, Operators, CRDs, HPA/VPA, multi-cluster."

@@ -1,0 +1,5 @@
+slug: cloud-core
+title: "AWS / Azure / GCP Core"
+level: intermediate
+order_index: 12
+description: "Compute, storage, IAM, networking (VPC)."

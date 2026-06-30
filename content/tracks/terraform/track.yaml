@@ -1,0 +1,5 @@
+slug: terraform
+title: "Terraform (Intro)"
+level: intermediate
+order_index: 11
+description: "Providers, resources, state, variables, outputs."
