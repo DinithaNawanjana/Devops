@@ -1,0 +1,8 @@
+id: proj-docker-registry
+title: "Project: Private Registry"
+track: docker
+level: intermediate
+estimated_minutes: 45
+image: lab-docker:latest
+prerequisites: [proj-docker-multistage]
+points: 300

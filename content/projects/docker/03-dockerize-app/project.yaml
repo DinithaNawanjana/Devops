@@ -1,0 +1,8 @@
+id: proj-docker-app
+title: "Project: Dockerize a Web App"
+track: docker
+level: intermediate
+estimated_minutes: 40
+image: lab-docker:latest
+prerequisites: [proj-docker-static]
+points: 250
