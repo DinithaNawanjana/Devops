@@ -51,19 +51,16 @@ the bottom for what remains (mostly authoring the full content library).
 
 ---
 
-## Quick start
+## Download & run (standalone)
 
-Requires Docker + Docker Compose.
+It's a self-contained folder — clone it and run one command. Requires **Docker +
+Docker Compose** (nothing else; Node/Python are only needed if you run the
+services outside Docker).
 
 ```bash
-# 1. Configure
-cp .env.example .env            # edit JWT_SECRET etc. for anything real
-
-# 2. Build the lab sandbox images (one-time)
-./scripts/build-lab-images.sh
-
-# 3. Launch the platform
-docker compose up --build
+git clone <your-fork-url> Devops
+cd Devops
+./start.sh          # creates .env, builds lab images, brings the stack up
 ```
 
 Then open:
@@ -72,7 +69,19 @@ Then open:
 - **API docs:** http://localhost:8000/docs
 
 Register an account, pick a track, open a lab, click **▶ Start Lab**, work in
-the in-browser terminal, then hit **✓ Check**.
+the in-browser terminal, then hit **✓ Check**. Stop with `docker compose down`.
+
+> First run builds the sandbox images and can take a few minutes. To skip that
+> (the web app runs, but labs won't start until images exist):
+> `SKIP_LAB_IMAGES=1 ./start.sh`.
+
+### Manual steps (what `start.sh` does)
+
+```bash
+cp .env.example .env            # 1. config (edit JWT_SECRET for anything real)
+./scripts/build-lab-images.sh   # 2. build lab sandbox images (one-time)
+docker compose up --build       # 3. launch web + api + db + redis
+```
 
 ---
 
