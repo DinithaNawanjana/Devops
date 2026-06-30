@@ -1,0 +1,8 @@
+id: proj-k8s-hpa
+title: "Project: Horizontal Pod Autoscaler"
+track: kubernetes
+level: advanced
+estimated_minutes: 35
+image: lab-k8s:latest
+prerequisites: [proj-k8s-storage]
+points: 300

@@ -17,5 +17,8 @@ docker build -t lab-ansible:latest lab-images/lab-ansible
 echo "▶ Building lab-terraform:latest"
 docker build -t lab-terraform:latest lab-images/lab-terraform
 
+echo "▶ Building lab-k8s:latest"
+docker build -t lab-k8s:latest lab-images/lab-k8s
+
 echo "✓ Lab images built:"
 docker images | grep '^lab-' || true

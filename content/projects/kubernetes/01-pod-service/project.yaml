@@ -1,0 +1,8 @@
+id: proj-k8s-pod
+title: "Project: Pod + Service"
+track: kubernetes
+level: advanced
+estimated_minutes: 35
+image: lab-k8s:latest
+prerequisites: [docker-01]
+points: 250

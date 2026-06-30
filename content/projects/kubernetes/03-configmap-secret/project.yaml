@@ -1,0 +1,8 @@
+id: proj-k8s-config
+title: "Project: ConfigMaps & Secrets"
+track: kubernetes
+level: advanced
+estimated_minutes: 40
+image: lab-k8s:latest
+prerequisites: [proj-k8s-deploy]
+points: 300

@@ -1,0 +1,8 @@
+id: proj-k8s-ingress
+title: "Project: Ingress Routing"
+track: kubernetes
+level: advanced
+estimated_minutes: 40
+image: lab-k8s:latest
+prerequisites: [proj-k8s-config]
+points: 300

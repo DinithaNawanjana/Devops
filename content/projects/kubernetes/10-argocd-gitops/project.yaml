@@ -1,0 +1,8 @@
+id: proj-k8s-argocd
+title: "Project: GitOps with ArgoCD"
+track: kubernetes
+level: advanced
+estimated_minutes: 55
+image: lab-k8s:latest
+prerequisites: [proj-k8s-rbac]
+points: 400
