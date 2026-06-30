@@ -1,35 +1,29 @@
-# Project: Multi-Container App with Compose
+# Deep Dive: Multi-container Apps with Compose
 
-Real apps are more than one container. **Docker Compose** declares a whole
-stack in one `docker-compose.yml` and brings it up with a single command.
+## Why Compose exists
+A real app is several processes — web, database, cache. Running each with a long
+`docker run` line is error-prone and undocumented. **Compose** declares the whole
+topology in one `docker-compose.yml`, version-controlled and reproducible:
+`docker compose up` brings it all up.
 
-## Anatomy of a compose file
+## The mental model
+Each `service` becomes one (or more) containers. Compose automatically creates a
+**shared network** for the project, and — crucially — services reach each other
+by **service name** as a DNS hostname (`web` can connect to `cache` at host
+`cache`). No IPs, no links.
 
-```yaml
-services:
-  web:
-    image: nginx:alpine
-    ports:
-      - "8080:80"
-    depends_on:
-      - cache
-  cache:
-    image: redis:7-alpine
-```
+## Key fields
+- `image` / `build` — where the container comes from.
+- `ports: "8080:80"` — publish host:container (only needed for things you reach
+  from outside).
+- `depends_on` — start ordering (but *not* readiness — see pitfalls).
+- `environment`, `volumes`, `networks`.
 
-- **services** — each becomes a container
-- **ports** — `HOST:CONTAINER` publishing
-- **depends_on** — start ordering
-- Compose creates a **shared network** so `web` can reach `cache` by name
+## Pitfalls
+- `depends_on` waits for the container to **start**, not for the app inside to be
+  **ready**. Use healthchecks + `condition: service_healthy` for true readiness.
+- Publishing ports you don't need (DB on the host) — an attack surface.
 
-## Commands
-
-```bash
-docker compose up -d        # create + start in the background
-docker compose ps           # list the stack
-docker compose logs web     # logs for one service
-docker compose down         # stop + remove
-```
-
-Services on the same Compose network resolve each other by **service name**
-(`cache`, `db`) — no IPs needed.
+## Real-world
+Compose runs local dev environments, CI test stacks, and many small production
+deployments; its model directly informs Kubernetes pods and services.
