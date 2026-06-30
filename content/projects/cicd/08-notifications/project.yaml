@@ -1,0 +1,8 @@
+id: proj-cicd-notify
+title: "Project: Pipeline Notifications"
+track: cicd
+level: intermediate
+estimated_minutes: 35
+image: lab-linux:latest
+prerequisites: [proj-cicd-matrix]
+points: 250

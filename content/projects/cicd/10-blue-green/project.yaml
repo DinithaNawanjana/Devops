@@ -1,0 +1,8 @@
+id: proj-cicd-bluegreen
+title: "Project: Blue-Green Deploy"
+track: cicd
+level: intermediate
+estimated_minutes: 45
+image: lab-linux:latest
+prerequisites: [proj-cicd-secrets]
+points: 350

@@ -1,0 +1,8 @@
+id: proj-cicd-secrets
+title: "Project: Secrets in Pipelines"
+track: cicd
+level: intermediate
+estimated_minutes: 35
+image: lab-linux:latest
+prerequisites: [proj-cicd-notify]
+points: 300

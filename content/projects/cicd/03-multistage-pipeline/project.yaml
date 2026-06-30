@@ -1,0 +1,8 @@
+id: proj-cicd-pipeline
+title: "Project: Build → Test → Deploy"
+track: cicd
+level: intermediate
+estimated_minutes: 40
+image: lab-linux:latest
+prerequisites: [proj-cicd-tagbuild]
+points: 300

@@ -1,0 +1,8 @@
+id: proj-cicd-deploy
+title: "Project: Auto-deploy on Merge"
+track: cicd
+level: intermediate
+estimated_minutes: 35
+image: lab-linux:latest
+prerequisites: [proj-cicd-gitlab]
+points: 250
